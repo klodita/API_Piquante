@@ -1,14 +1,15 @@
 
 const express = require('express');
-// const auth = require('auth');
 const router = express.Router();
-
+// const auth = require('../middleware/auth');
+const multer = require('../middleware/multer-config');
 const sauceCtrl = require('../controllers/sauces'); 
 
 
 
+
   //Pour poster une nouvelle sauce dans la base de donné
-  router.post('/', sauceCtrl.createSauce);
+  router.post('/', multer, sauceCtrl.createSauce);
   
   //Pour obtenir le tableau de toute les sauces
   router.get('/', sauceCtrl.getAllSauce);
@@ -17,9 +18,9 @@ const sauceCtrl = require('../controllers/sauces');
   router.get('/:id', sauceCtrl.getOneSauce);
   
   //Pour modifier une sauce selon son id
-  router.put('/:id', sauceCtrl.modifySauce);
+  router.put('/:id', multer, sauceCtrl.modifySauce);
   
   //Pour supprimer une sauce
-  router.delete('/:id', sauceCtrl.deleteSauce);
+  router.delete('/:id', multer, sauceCtrl.deleteSauce);
   
   module.exports = router;
