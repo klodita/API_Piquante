@@ -3,7 +3,7 @@ const app = express();
 const cors = require('cors')
 
 const utilisateurRoutes = require('./routes/utilisateur');
-const Sauce = require('./models/Sauce');
+const sauceRoutes = require('./routes/sauce');
 
 // Connexion avec la base de donnée MongoDB
 const mongoose = require('mongoose');
@@ -26,50 +26,7 @@ app.use(cors());
 
 app.use(express.json());
 app.use('/api/auth', utilisateurRoutes);
-
-//Pour poster une nouvelle sauce dans la base de donné
-app.post('/api/sauces', (req,res,next)=>{
-  delete req.body._id;
-  const sauce = new Sauce({
-    ...req.body
-  });
-  sauce.save()
-  .then(()=> res.status(201).json({message:'Sauce enregistré'}))
-  .catch(error => res.status(400).json({error}));
-  
-})
-
-//Pour obtenir le tableau de toute les sauces
-app.get('/api/sauces', (req, res, next)=>{
-  Sauce.find()
-  .then(sauce => res.status(200).json(sauce))
-  .catch(error => res.status(400).json({error}))
-})
-
-
-// Pour obtenir la page d'une sauce selon son id
-app.get('/api/sauces/:id', (req, res, next)=>{
-  Sauce.findOne({_id: req.params.id})
-  .then(sauce => res.status(200).json(sauce))
-  .catch(error=> res.status(404).json({error}));
-})
-
-//Pour modifier une sauce selon son id
-app.put('/api/sauces/:id', (req,res,next)=>{
-  Sauce.updateOne({_id: req.params.id},
-    {
-      ...req.body, _id:req.params.id
-    })
-    .then(()=> res.status(200).json({message:'Sauce modifié !'}))
-    .catch(error => res.status(400).json({error}))
-});
-
-//Pour supprimer une sauce
-app.delete('/api/sauces/:id', (req,res, next)=>{
-  Sauce.deleteOne({_id: req.params})
-  .then(()=> res.status(200).json({message:'Sauce supprimé'}))
-  .catch(error=> res.status(400).json(error));
-})
+app.use('/api/sauces', sauceRoutes);
 
 
 
