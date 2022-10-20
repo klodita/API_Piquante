@@ -1,14 +1,21 @@
 const express = require('express');
 const app = express();
-const cors = require('cors');
-const path = require('path');
-
+const mongoose = require('mongoose');
+const auth = require('./middleware/auth');
 const utilisateurRoutes = require('./routes/utilisateur');
 const sauceRoutes = require('./routes/sauce');
 
+const cors = require('cors');
+const path = require('path');
+
+
+//Protection des données mongoDB
+const user = process.env.DB_USER;
+const passWord = process.env.DB_PASSWORD;
+
 // Connexion avec la base de donnée MongoDB
-const mongoose = require('mongoose');
-mongoose.connect('mongodb+srv://adminKamala:yW95nPfzlWf0pYpg@cluster0.pjzvn5o.mongodb.net/?retryWrites=true&w=majority',{
+
+mongoose.connect(`mongodb+srv://${user}:${passWord}@cluster0.pjzvn5o.mongodb.net/?retryWrites=true&w=majority`,{
    useNewUrlParser: true,
    useUnifiedTopology: true 
 })
@@ -18,20 +25,11 @@ mongoose.connect('mongodb+srv://adminKamala:yW95nPfzlWf0pYpg@cluster0.pjzvn5o.mo
 
 app.use(cors());
 
-// app.use((req, res, next) => {
-//     res.setHeader('Access-Control-Allow-Origin', '*');
-//     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-//     next();
-//   });
 
 app.use(express.json());
 
-app.use('/api/auth',utilisateurRoutes);
-app.use('/api/sauces',sauceRoutes);
+app.use('/api/auth', utilisateurRoutes);
+app.use('/api/sauces', sauceRoutes);
 app.use('/images', express.static(path.join(__dirname,'images')));
-
-
-
 
 module.exports = app;

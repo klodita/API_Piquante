@@ -1,7 +1,7 @@
-
+const Utilisateur = require('../models/Utilisateur');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const Utilisateur = require('../models/Utilisateur');
+
 
 exports.signup = (req, res, next)=>{
 bcrypt.hash(req.body.password, 10)
@@ -15,6 +15,7 @@ bcrypt.hash(req.body.password, 10)
     .catch(error=>res.status(400).json({error}));
 })
 .catch(error=>res.status(500).json({error}));
+
 
 };
 
@@ -53,5 +54,5 @@ exports.login = (req, res, next)=>{
     })
     .catch(error=>res.status(500).json({error}));
     
-    
+   
 };
