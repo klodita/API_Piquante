@@ -24,8 +24,6 @@ mongoose.connect(`mongodb+srv://${user}:${passWord}@cluster0.pjzvn5o.mongodb.net
 
 
 app.use(cors());
-
-
 app.use(express.json());
 
 app.use('/api/auth', utilisateurRoutes);

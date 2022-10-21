@@ -21,4 +21,13 @@ const router = express.Router();
   //Pour supprimer une sauce
   router.delete('/:id', auth, multer,sauceCtrl.deleteSauce);
   
+  
+  //Système de vote 
+  
+  //Pour poster un vote Like/Dislike
+  router.post('/:id/like', auth, sauceCtrl.createLike);
+  
+  //Pour poster un vote Like
+  // router.post('/', auth, sauceCtrl.createDislike);
+  
   module.exports = router;
