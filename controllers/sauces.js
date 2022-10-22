@@ -2,7 +2,6 @@ const Sauce = require('../models/Sauce');
 const fs = require('fs');
 
 
-
 exports.getAllSauce = (req, res, next)=>{
     Sauce.find()
     .then(sauce => res.status(200).json(sauce))
@@ -40,12 +39,11 @@ exports.createSauce = (req,res,next)=>{
    sauce.save()
    .then(()=>{res.status(201).json({message:'Sauce créé !'})})
    .catch(error => {res.status(400).json({error})})
-
-
   };
 
   
   exports.modifySauce = (req,res,next)=>{
+   
    const sauceObjet = req.file ? {
     ...JSON.parse(req.body.sauce),
     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
@@ -53,28 +51,41 @@ exports.createSauce = (req,res,next)=>{
 
    Sauce.findOne({_id: req.params.id})
    .then((sauce)=>{
+   
+   
     if(sauce.userId != req.auth.userId){
         res.status(401).json({message:'Non-autorisé'});
     }
+
     else{
-      const filename = sauce.imageUrl.split('/images/')[1];
-      /*fs.unlink va écraser l'ancienne image si une nouvelle image est uploadé
-      ainsi le dossier images ne comporte pas d'images non utilisé*/
-      fs.unlink(`./images/${filename}`, () => {
+
+    const badImg = sauce.imageUrl;
+    const newImg = sauceObjet.imageUrl;
+    const filename = sauce.imageUrl.split('/images/')[1];
+    const {unlink} = require("fs/promises");
+ 
         Sauce.updateOne({_id:req.params.id},
           {... sauceObjet, _id: req.params.id})
           .then(()=> res.status(200).json({message:'Sauce modifié'}))
           .catch(error => res.status(400).json({error}));
-      });
-       
+            
+    if(newImg !== undefined){
+      //fonctionnalité fs.unlink qui permet de supprimer dans le dossier images l'ancienne images (filename)
+        unlink("images/"+filename)
+        .then((res)=> console.log("image supprimé", res))
+        .catch((error)=> console.error("Imposible de supprimer l'image",error))
+      
+      }
     }
-  
+ 
    })
    .catch((error)=> {
     res.status(400).json({error})
    });
   
   };
+
+
 
 exports.deleteSauce = (req, res) => {
   Sauce.findOne({ _id: req.params.id })
@@ -151,7 +162,7 @@ Sauce.updateOne(
 )
 
 .then(() => {res.status(201).json({ message: "Vous avez voté" })
-return console.log("Vote comptabilisez !")})
+return console.log("Vote comptabilisé !")})
 .catch((error) => res.status(403).json({ error }));
 })
 .catch((error) => res.status(403).json({ error }));
