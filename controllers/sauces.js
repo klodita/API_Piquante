@@ -1,5 +1,6 @@
 const Sauce = require('../models/Sauce');
 const fs = require('fs');
+const { callbackify } = require('util');
 
 
 exports.getAllSauce = (req, res, next)=>{
@@ -19,8 +20,19 @@ exports.createSauce = (req,res,next)=>{
    const sauceObjet = JSON.parse(req.body.sauce);
 
    const {userId,name,manufacturer,description,mainPepper,heat} = sauceObjet;
-   const imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
-  
+   let imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+let mimeType = req.file.mimetype.split('image/').join('');
+   if(mimeType !== 'jpg'|'png'|'jpeg'){
+    imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.originalname}`
+    const {unlink} = require("fs/promises");
+    const filename = imageUrl.split('/images/')[1];
+    
+      //fonctionnalité fs.unlink qui permet de supprimer dans le dossier images l'ancienne images (filename)
+      unlink("images/"+filename)
+      .then((res)=> console.log("image supprimé", res))
+      .catch((error)=> console.error("Impossible de supprimer l'image",error))
+   }
+
    const sauce = new Sauce({
     userId,
     name,
@@ -35,6 +47,7 @@ exports.createSauce = (req,res,next)=>{
     usersDisliked:[],
 
    });
+   
    
    sauce.save()
    .then(()=>{res.status(201).json({message:'Sauce créé !'})})
@@ -59,9 +72,9 @@ exports.createSauce = (req,res,next)=>{
 
     else{
 
-    const badImg = sauce.imageUrl;
     const newImg = sauceObjet.imageUrl;
     const filename = sauce.imageUrl.split('/images/')[1];
+  
     const {unlink} = require("fs/promises");
  
         Sauce.updateOne({_id:req.params.id},
@@ -70,12 +83,14 @@ exports.createSauce = (req,res,next)=>{
           .catch(error => res.status(400).json({error}));
             
     if(newImg !== undefined){
+     
       //fonctionnalité fs.unlink qui permet de supprimer dans le dossier images l'ancienne images (filename)
         unlink("images/"+filename)
         .then((res)=> console.log("image supprimé", res))
-        .catch((error)=> console.error("Imposible de supprimer l'image",error))
+        .catch((error)=> console.error("Impossible de supprimer l'image",error))
       
       }
+      
     }
  
    })
