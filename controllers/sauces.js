@@ -1,8 +1,6 @@
 const Sauce = require('../models/Sauce');
 const fs = require('fs');
 
-
-
 exports.getAllSauce = (req, res, next)=>{
     Sauce.find()
     .then(sauce => res.status(200).json(sauce))
@@ -17,22 +15,10 @@ exports.getAllSauce = (req, res, next)=>{
   };
 
 exports.createSauce = (req,res,next)=>{
-   const sauceObjet = JSON.parse(req.body.sauce);
-   const {userId,name,manufacturer,description,mainPepper,heat} = sauceObjet;
-   let imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+  const sauceObjet = JSON.parse(req.body.sauce);
+  const {userId,name,manufacturer,description,mainPepper,heat} = sauceObjet;
+  let imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
 
-//Vérifcation si le mimetype est autorisé   
-let mimeType = req.file.mimetype.split('image/').join('');
-   if(mimeType !== 'jpg'|'png'|'jpeg'){
-    imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.originalname}`
-    const {unlink} = require("fs/promises");
-    const filename = imageUrl.split('/images/')[1];
-    
-      //fonctionnalité fs.unlink qui permet de supprimer dans le dossier images l'ancienne images (filename)
-      unlink("images/"+filename)
-      .then((res)=> console.log("image supprimé", res))
-      .catch((error)=> console.error("Impossible de supprimer l'image",error))
-   }
 
    const sauce = new Sauce({
     userId,
