@@ -10,5 +10,5 @@ puis faire npm run start, le server tourne sur le localhost:3000;
 Créer un dossier qui s'appelle  "images" afin de permettre à multer de sauvegarder les images uploadés, attention à l'orthographe !
 vous devez également ajouter dans le dossier commun, le fichier .env que je vous ai envoyé en pièces jointes afin de travailler avec la base de donnée MongoDB
 
-Pour finir téléchargé le dossier front-end https://github.com/klodita/frontend et faite npm install pour insaller les dépendences
-puis npm run start (ou ng server) afin de voir la partie front-end du site qui s'affchera sur le localhost:4200;
+Pour finir télécharger le dossier front-end https://github.com/klodita/frontend et faite npm install pour insaller les dépendences
+puis npm run start (ou ng server) afin de voir la partie front-end du site qui s'affichera sur le localhost:4200;
