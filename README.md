@@ -12,3 +12,4 @@ vous devez également ajouter dans le dossier commun, le fichier .env que je vou
 
 Pour finir télécharger le dossier front-end https://github.com/klodita/frontend et faite npm install pour installer les dépendences
 puis npm run start (ou ng server) afin de voir la partie front-end du site qui s'affichera sur le localhost:4200;
+Attention toute fois car le front-end à été développé avec Angular veuillez prendre en compte le README.md de ce projet à cette adresse https://github.com/klodita/Web-Developer-P6#readme.
