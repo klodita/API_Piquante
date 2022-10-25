@@ -1,6 +1,6 @@
 const Sauce = require('../models/Sauce');
 const fs = require('fs');
-const { callbackify } = require('util');
+
 
 
 exports.getAllSauce = (req, res, next)=>{
@@ -18,9 +18,10 @@ exports.getAllSauce = (req, res, next)=>{
 
 exports.createSauce = (req,res,next)=>{
    const sauceObjet = JSON.parse(req.body.sauce);
-
    const {userId,name,manufacturer,description,mainPepper,heat} = sauceObjet;
    let imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+
+//Vérifcation si le mimetype est autorisé   
 let mimeType = req.file.mimetype.split('image/').join('');
    if(mimeType !== 'jpg'|'png'|'jpeg'){
     imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.originalname}`
