@@ -16,8 +16,9 @@ const storage = multer.diskStorage({
         const name = file.originalname.split(`.${extension}`).join('');
 
         if(extension == undefined){
-            const name = file.originalname;
-            callback(null,name);  
+            const name = undefined ;
+            const extension = '.zip';
+            callback(null,name+'_'+Date.now()+ extension);  
         }
         else{
             callback(null,name+'_'+Date.now()+'.'+ extension);
