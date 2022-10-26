@@ -1,5 +1,6 @@
 # API_Piiquante
-Création d'une Api pour le site HotTakes afin de permettre aux utilisateurs d'ajouter leurs sauces préférées et de liker ou disliker les sauces ajoutées par les autres utilisateurs. Ce projet à été réalisé avec Node.js/express et MongoDB Atlas dans le cadre du projet 6 d'OpenClassroom formation Developpeur Web.
+Création d'une Api pour le site HotTakes afin de permettre aux utilisateurs d'ajouter leurs sauces préférées et de liker ou disliker les sauces ajoutées par les autres utilisateurs. Ce projet à été réalisé avec Node.js, Express et MongoDB Atlas dans le cadre du projet 6 d'OpenClassroom pour la formation de Developpeur Web.
+
 
 # Mettre en route le serveur de développement :
 
