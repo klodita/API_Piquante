@@ -42,7 +42,7 @@ exports.login = (req, res, next)=>{
                                 userId: utilisateur._id
                             },
                             'RANDOM_TOKEN_SECRET',
-                            {expiresIn: '24h'}
+                            {expiresIn: '1h'}
                         )
                     });
                 }
