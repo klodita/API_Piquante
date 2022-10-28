@@ -57,19 +57,32 @@ exports.createSauce = (req,res,next)=>{
         res.status(401).json({message:'Non-autorisé'});
     }
 
-    else{
 
+  
+
+   else { 
+ 
+     /*Pour empêcher à l'utilisateur de changer les informations clés propre à un autre utilisateur 
+     et qu'il ne s'amuse pas avec les likes/dislikes et usersLiked/usersDisliked en faissant des
+     requête Put via Postman ou autre*/  
+     if(sauce.userId == req.body.userId && sauce._id == req.body._id && sauce.likes == req.body.likes && sauce.dislikes == req.body.dislikes 
+     && String(sauce.usersLiked) == String(req.body.usersLiked) && String(sauce.usersDisliked) == String(req.body.usersDisliked)
+     || sauce.imageUrl == req.body.imagerUrl || sauce.imageUrl !== req.body.imageUrl){
+     
+      Sauce.updateOne({_id:req.params.id},
+        {... sauceObjet, _id: req.params.id})
+        .then(()=> { 
+          res.status(200).json({message:'Sauce modifié'})})
+        .catch(error => res.status(400).json({error}));
+    
+    }
+    else {res.status(401).json({message:'Non-autorisé !!! '});}
+        
     const newImg = sauceObjet.imageUrl;
     const filename = sauce.imageUrl.split('/images/')[1];
   
-    const {unlink} = require("fs/promises");
- 
-        Sauce.updateOne({_id:req.params.id},
-          {... sauceObjet, _id: req.params.id})
-          .then(()=> res.status(200).json({message:'Sauce modifié'}))
-          .catch(error => res.status(400).json({error}));
-            
-    if(newImg !== undefined){
+    const {unlink} = require("fs/promises");    
+     if(newImg !== undefined){
      
       //fonctionnalité fs.unlink qui permet de supprimer dans le dossier images l'ancienne images (filename)
         unlink("images/"+filename)
@@ -77,8 +90,10 @@ exports.createSauce = (req,res,next)=>{
         .catch((error)=> console.error("Impossible de supprimer l'image",error))
       
       }
-      
+    
     }
+      
+    
  
    })
    .catch((error)=> {
